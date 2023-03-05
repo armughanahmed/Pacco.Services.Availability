@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Convey;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Pacco.Services.Availability.Application;
+using Pacco.Services.Availability.Infrastructure.Mongo;
 
 namespace Pacco.Services.Availability.Api
 {
@@ -12,7 +15,13 @@ namespace Pacco.Services.Availability.Api
                 .RunAsync();
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-            => WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            => WebHost.CreateDefaultBuilder(args).ConfigureServices(services =>
+            services
+            .AddConvey()
+            .AddApplication()
+            .Build()).Configure(app =>
+            {
+                app.UseInfrastructure();
+            });
     }
 }
